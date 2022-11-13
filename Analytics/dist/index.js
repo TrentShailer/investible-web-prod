@@ -60,4 +60,13 @@ fastify.listen({ port: process.env.PORT, host: "0.0.0.0" }, (err, address) => {
         process.exit(1);
     }
     console.log(`Server listening at ${address}`);
+    FixNegativeGameLength();
 });
+async function FixNegativeGameLength() {
+    const { rows } = await fastify.pg.query("SELECT id, game_time FROM game WHERE game_time < 0;");
+    for (const row of rows) {
+        const { id, game_time } = row;
+        const fixedGameTime = Math.abs(game_time);
+        await fastify.pg.query("UPDATE game SET game_time = $1 WHERE id = $2", [fixedGameTime, id]);
+    }
+}
