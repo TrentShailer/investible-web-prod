@@ -14,8 +14,7 @@ async function plugin(fastify, options) {
 					COUNT(*)::INT
 						FROM game WHERE
 							timestamp > CURRENT_DATE - interval '21 day' AND
-							turns > 10 AND
-							DATE(timestamp) != CURRENT_DATE
+							turns > 10
 								GROUP BY DATE(timestamp);`);
             // Get the days in the last 21 days
             const { rows: blankData } = await fastify.pg.query(`SELECT

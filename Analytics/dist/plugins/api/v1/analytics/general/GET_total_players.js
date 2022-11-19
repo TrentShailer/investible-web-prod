@@ -6,7 +6,7 @@ async function plugin(fastify, options) {
             return res.status(401).send();
         }
         try {
-            const { rows } = await fastify.pg.query(`SELECT COUNT(*) as count FROM device;`);
+            const { rows } = await fastify.pg.query(`SELECT COUNT(*) as count FROM player;`);
             const count = rows[0].count ?? 0;
             return res.status(200).send(count);
         }

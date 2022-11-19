@@ -49,7 +49,8 @@ async function NoDetailsPlayerID(fastify, body, player_id) {
 async function HandleDetails(fastify, body) {
     const matches = await CheckMatch(fastify, body);
     if (matches === null) {
-        CreatePlayerDetails(fastify, body);
+        // This should no longer be called due to default player creation
+        await CreatePlayerDetails(fastify, body);
     }
     else {
         if (matches.length === 1) {
@@ -142,6 +143,7 @@ async function default_1(fastify) {
                     await NoDetailsPlayerID(fastify, request.body, existing_player_id);
                 }
                 else {
+                    // This should no longer be called due to default player creation on device creation
                     await NoDetailsNoPlayerID(fastify, request.body);
                 }
             }
