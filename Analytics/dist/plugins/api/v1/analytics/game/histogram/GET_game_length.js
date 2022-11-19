@@ -6,7 +6,11 @@ async function plugin(fastify, options) {
             return res.status(401).send();
         }
         try {
-            const { rows: binSizeRows } = await fastify.pg.query("SELECT ROUND(STDDEV(game_time)/4)::INT AS bin_size FROM game WHERE turns > 10 AND DATE(timestamp) != CURRENT_DATE;");
+            /* const { rows: binSizeRows } = await fastify.pg.query<{ bin_size: number | null }>(
+                "SELECT ROUND(STDDEV(game_time)/4)::INT AS bin_size FROM game WHERE turns > 10 AND DATE(timestamp) != CURRENT_DATE;"
+            ); */
+            // as above but ignore outliers
+            const { rows: binSizeRows } = await fastify.pg.query("SELECT ROUND(STDDEV(game_time)/4)::INT AS bin_size FROM game WHERE turns > 10 AND DATE(timestamp) != CURRENT_DATE AND game_time < 5 * (SELECT AVG(game_time) FROM game WHERE turns > 10 AND DATE(timestamp) != CURRENT_DATE);");
             let binSize = Number((binSizeRows[0].bin_size ?? 1).toPrecision(2));
             if (binSize < 1)
                 binSize = 1;

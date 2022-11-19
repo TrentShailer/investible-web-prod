@@ -10,14 +10,14 @@ async function plugin(fastify, options) {
             if (rows.length === 0) {
                 return res.status(200).send([
                     { name: "Unstable", value: 25 },
-                    { name: "Poor", value: 25 },
+                    { name: "Bankrupt", value: 25 },
                     { name: "Quit to Main Menu", value: 25 },
                     { name: "Gave Up", value: 25 },
                 ]);
             }
             const total = rows.reduce((acc, row) => acc + row.count, 0);
             const data = rows.map((row) => ({
-                name: ["Unstable", "Poor", "Quit to Main Menu", "Gave Up"][row.game_end_reason],
+                name: ["Unstable", "Bankrupt", "Quit to Main Menu", "Gave Up"][row.game_end_reason],
                 value: Number(((row.count / total) * 100).toFixed(1)),
             }));
             return res.status(200).send(data);
