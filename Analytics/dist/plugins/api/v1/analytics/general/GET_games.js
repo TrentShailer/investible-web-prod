@@ -8,8 +8,13 @@ async function plugin(fastify, options) {
         try {
             const { rows } = await fastify.pg.query(`SELECT
 					ROUND(AVG(game_count))::INT as count
-					FROM
-						(SELECT COUNT(*) as game_count FROM game WHERE GROUP BY player_id)t;`);
+				FROM
+					(
+						SELECT COUNT(*) as game_count
+						FROM game
+						WHERE player_id IS NOT NULL
+						GROUP BY player_id
+					)t;`);
             const count = rows[0].count ?? 0;
             return res.status(200).send([{ name: "Average Number of Games", value: count }]);
         }
