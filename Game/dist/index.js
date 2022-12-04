@@ -49,5 +49,5 @@ fastify.listen({ port: process.env.PORT, host: "0.0.0.0" }, (err, address) => {
     }
 });
 async function fix_constraint() {
-    await fastify.pg.query(`ALTER TABLE device DROP CONSTRAINT device_player_id_fkey, ADD CONSTRAINT device_player_id_fkey FOREIGN KEY (player_id) REFERENCES player(id);`);
+    await fastify.pg.query(`ALTER TABLE device DROP CONSTRAINT device_player_id_fkey, ADD CONSTRAINT device_player_id_fkey FOREIGN KEY (player_id) REFERENCES player(id) ON DELETE SET NULL;`);
 }
