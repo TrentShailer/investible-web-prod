@@ -40,7 +40,7 @@ async function default_1(fastify) {
 				ORDER BY portfolio_value DESC
 				LIMIT 10 OFFSET $3;`, [competition.start_date, competition.end_date, (page - 1) * 10]);
                 // get the total number of players
-                const { rows: totalRows } = await fastify.pg.query(`SELECT COUNT(DISTINCT player_id) FROM leaderboard
+                const { rows: totalRows } = await fastify.pg.query(`SELECT COUNT(DISTINCT leaderboard.player_id) FROM leaderboard
 				INNER JOIN game ON leaderboard.game_id = game.id
 				WHERE game.timestamp BETWEEN $1 AND $2;`, [competition.start_date, competition.end_date]);
                 const count = totalRows[0].count;
