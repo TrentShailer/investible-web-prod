@@ -14,11 +14,13 @@ async function default_1(fastify) {
             // Ensure game_id exists
             const { rowCount: gameExists } = await fastify.pg.query(`SELECT id FROM game WHERE id = $1;`, [gameID]);
             if (gameExists === 0) {
+                console.log("Game does not exist");
                 return reply.status(404).send();
             }
             // Ensure player_id exists
             const { rowCount: playerExists } = await fastify.pg.query(`SELECT id FROM player WHERE id = $1;`, [playerID]);
             if (playerExists === 0) {
+                console.log("Player does not exist");
                 return reply.status(404).send();
             }
             // create new leaderboard entry

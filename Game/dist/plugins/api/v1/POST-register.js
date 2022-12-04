@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const uuid_1 = require("uuid");
 async function default_1(fastify) {
     fastify.post("/register", async (request, reply) => {
         try {
@@ -24,7 +23,6 @@ async function default_1(fastify) {
                 return reply.status(400).send();
             }
             if (playerExists === 0) {
-                const player_id = (0, uuid_1.v4)();
                 // update current player
                 await fastify.pg.query(`UPDATE player SET name = $1, first_name = $2, last_name = $3, email = $4, mobile = $5 WHERE id = $6;`, [displayName, firstName, lastName, email, mobile, currentPlayerID]);
                 // await fastify.pg.query(
@@ -37,7 +35,7 @@ async function default_1(fastify) {
                 // 	deviceID,
                 // ]);
                 return reply.status(200).send({
-                    playerID: player_id,
+                    playerID: currentPlayerID,
                     displayName,
                     firstName,
                     lastName,
