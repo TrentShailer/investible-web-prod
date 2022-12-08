@@ -7,7 +7,7 @@ async function default_1(fastify) {
             if (!email || !deviceID) {
                 return reply.status(400).send();
             }
-            const { rowCount: playerExists, rows } = await fastify.pg.query(`SELECT id, name, first_name, last_name, email, mobile FROM player WHERE email = $1;`, [email]);
+            const { rowCount: playerExists, rows } = await fastify.pg.query(`SELECT id, name, first_name, last_name, email, mobile FROM player WHERE LOWER(email) = $1;`, [email.toLowerCase()]);
             if (playerExists === 0) {
                 return reply.status(404).send();
             }
